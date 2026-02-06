@@ -1,0 +1,10 @@
+.git
+_build
+deps
+node_modules
+web/node_modules
+web/.svelte-kit
+web/build
+.DS_Store
+.env
+.env.*

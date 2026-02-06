@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: notes_app_postgres
+    environment:
+      POSTGRES_USER: notes_user
+      POSTGRES_PASSWORD: notes_password
+      POSTGRES_DB: notes_app_gcloud_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - notes_app_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U notes_user -d notes_app_gcloud_dev"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  notes_app_pg_data:

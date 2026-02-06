@@ -1,0 +1,35 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: notes-api
+  annotations:
+    run.googleapis.com/ingress: all
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/cloudsql-instances: newest-project-485620:us-central1:cloud-codex-notes
+    spec:
+      containers:
+        - image: us-central1-docker.pkg.dev/newest-project-485620/notes/notes-api:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: INSTANCE_CONNECTION_NAME
+              value: newest-project-485620:us-central1:cloud-codex-notes
+            - name: DB_USER
+              value: gcloud-dbuser
+            - name: DB_NAME
+              value: gcloud-notes
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: notes-db-password
+                  key: latest
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: notes-secret-key-base
+                  key: latest
+            - name: PORT
+              value: "8080"
